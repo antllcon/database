@@ -4,7 +4,6 @@
 Будьте готовы пояснить свое решение с помощью терминов из лекции.
 
 
-
 ### 1.1 - 5 баллов
 __Попытки прохождения курса__.
 Отношение __S__ (email, login, content_title, passed_scores, dates). 
@@ -19,7 +18,7 @@ __Попытки прохождения курса__.
 - `login` – login пользователя
 - `content_title` – наименование курса
 - `passed_scores` – средний балл за попытку прохождения курса
-- `dates` – даты попыток
+- `date` – даты попыток
 
 Вторая нормальная форма - декомпозируем на таблицы Users и Attempts:
 1. Таблица __Users__ или отношение __SE__ - `email`:
@@ -27,140 +26,191 @@ __Попытки прохождения курса__.
     - `login` – login пользователя
 
 2. Таблица __Attempts__ или отношение __SECD__ - `email`, `content_title`,
- `dates`:
+ `date`:
     - `email` – email пользователя
     - `content_title` – наименование курса
-    - `dates` – даты попыток
+    - `date` – даты попыток
     - `passed_scores` – средний балл за попытку прохождения курса
 
 Третья нормальная форма уже сформирована, нет транзитивных зависимостей.
-
 
 ### 1.2 - 7 баллов
 __Таблица истории оплаты газоснабжения__.
 Отношение P (client_inn, volumes, date, addresses, costs). 
 - `client_inn` - ИНН плательщика
-- `volumes` - обьёмы оплаты газа
-- `date` - дата оплаты
+- `volumes` - обьёмы потребляемого газа
+- `date` - дата начисления
 - `addresses` - адреса, по которым оплачивался газ, включая город, улицу,
                 номер дома и квартиру
-- `costs` - суммы оплат
+- `price` - цена за 1м3 газа в день начисления
+- `costs` - суммы начислений, зависит от объёма поставленного газа 
 
 Первая нормальная форма - все атрибуты содержат атомарные значения, 
 нет повторяющихся групп данных:
 - `client_inn` - ИНН плательщика
-- `volumes` - обьёмы оплаты газа
+- `volume` - обьём потребляемого газа
+- `cost` - сумма оплаты
 - `date` - дата оплаты
-- `city` - название города
-- `street` - название улицы
-- `house` - номер дома
-- `flat` - номер квартиры
-- `costs` - суммы оплат
+- `adress` - адрес
 
 Вторая нормальная форма - декомпозируем отношение P:
-1. Таблица __Payments__ или отношение __PCDA__ - `client_inn`, `date`, `adress_id`
-    - `client_inn` - ИНН плательщика
-    - `date` - дата оплаты
-    - `adress_id` - уник. идент. (для связи с таблицей адресов)
-    - `volumes` - обьёмы оплаты газа
-    - `costs` - суммы оплат
+1. Отношение __PCA__
+    - `adress`
+    - client_inn
 
-2. Таблица __Adresses__ или отношение __PCA__ `client_inn`, `adress_id`
-    - `adress_id` - уник. идент. (может быть и не одна кв. в собственности)
-    - `client_inn` - ИНН плательщика
-    - `city` - название города
-    - `street` - название улицы
-    - `house` - номер дома
-    - `flat` - номер квартиры
+2. Отношение __PCAD__ 
+    - `adress`
+    - `date`
+    - volume
+    - cost
 
-Третья нормальная форма уже соблюдена, нет транзитивных зависимостей.
+3. Отношение __PD__
+    - `date`
+    - price
+
+Третья нормальная форма:
+1. Отношение __PCA__
+    - `adress`
+    - client_inn
+
+2. Отношение __PCAD__ 
+    - `adress`
+    - `date`
+    - volume
+
+3. Отношение __PD__
+    - `date`
+    - price
+
+4. Отношение  __PCD__
+    - `volume`
+    - `price`
+    - cost
 
 ### 1.3 - 8 баллов
 __Таблица аттестаций студентов__.
-Отношение A (student_email, teacher_emails, subjects, max_attestation_scores, min_attestation_scores, student_attestation_scores, date,
+Отношение A (student_email, teacher_emails, subjects, max_attestation_scores, 
+min_attestation_scores, student_attestation_scores, date,
 are_all_attestations_passed). 
 
+Первая нормальная форма:
 - `student_email` - email студента
-- `teacher_names` - email-ы преподавателей
-- `subjects` - Предметы - пусть будут уникальными
-- `max_attestation_scores` - максимальные баллы за аттестацию
-- `min_attestation_scores` - минимальные проходные баллы за аттестацию
-- `student_attestation_scores` - фактические баллы студента за аттестацию
-- `date` - дата аттестации
-- `are_all_attestations_passed` - пройдены ли студентом аттестации по всем
-предметам в этом
-
-Первая нормальная форма - все атрибуты содержат атомарные значения, 
-нет повторяющихся групп данных:
-
-Проблему вызывают email-ы преподавателей - сделаем `teacher_name`, чтобы не
-нарушать атомарность. А также `subjects` - исправим.
-
-- `student_email` - email студента
-- `teacher_name` - email-ы преподавателей
+- `teacher_email` - email преподавателя
 - `subject` - предмет (уникальный)
 - `date` - дата аттестации
-- `max_attestation_scores` - максимальные баллы за аттестацию
-- `min_attestation_scores` - минимальные проходные баллы за аттестацию
-- `student_attestation_scores` - фактические баллы студента за аттестацию
-- `are_all_attestations_passed` - пройдены ли студентом все аттестации 
+---
+- teacher_phone - телефон преподавателя
+- teacher_phone_opertaion_system - оп. система телефона преподавателя
+- max_attestation_score - максимальные балл за аттестацию
+- min_attestation_score - минимальные проходные балл за аттестацию
+- student_attestation_score - фактические балл студента за аттестацию
+- are_all_attestations_passed - пройдены ли студентом все аттестации 
 
-Вторая нормальная форма - ДЕКОМПОЗИРУЕМ!!!:
-Сразу видно, что можно поделть на предметы, преподавателей с баллами и студентов
-с их результатами
+Вторая нормальная форма:
+1.  Отношение __ASD__
+    - `subject`
+    - `date`
+    - max_attestation_score
+    - min_attestation_score
 
-1. Таблица __Subjects__ или отношение __AS__ - `subject`
-    - `subject` - предмет (уникальный)
-    - `teacher_name` - email-ы преподавателей
-    - `max_attestation_scores` - максимальные баллы за аттестацию
-    - `min_attestation_scores` - минимальные проходные баллы за аттестацию
+2. Отношение __ASD__
+    - `student_email`
+    - `date`
+    - are_all_attestations_passed
 
-2. Таблица __Students__ или отношение __ASSD__ - `student_email`, `subject`,
-`date`
-    - `student_email` - контакт студента (уникальный)
-    - `subject` - ИНН плательщика
-    - `date` - дата
-    - `student_attestation_scores` - фактические баллы студента за аттестацию
-    - `are_all_attestations_passed` - прохождение всех аттестаций
+3. Отношение __AT__
+    - `teacher_email`
+    - teacher_phone
+    - teacher_phone_opertaion_system
 
-_Спросить норм ли хранить про каждого студента табличку?_
+4. Отношение __ASSD__
+    - `student_email`
+    - `subject`
+    - `date`
+    - student_attestation_score
 
-Третья нормальная форма... опять 25... все норм, уже готова.
+5. Отношение __AST__
+    - `subject`
+    - `student_email`
+    - teacher_email
+
+---
+Третья нормальная форма:
+1. Отношение __ASD__ - Аттестации
+    - `subject`
+    - `date`
+    - max_attestation_score
+    - min_attestation_score
+
+2. Отношение __ASD__ 
+    - `student_email`
+    - `date`
+    - are_all_attestations_passed
+
+3. Отношение __ASSD__
+    - `student_email`
+    - `subject`
+    - `date`
+    - student_attestation_score
+
+4. Отношение __AT__
+    - `teacher_email`
+    - teacher_phone
+
+5. Отношение __ATP__:
+    - `teacher_phone`
+    - teacher_phone_opertaion_system
+
+6. Отношение __AST__
+    - `subject`
+    - `student_email`
+    - teacher_email
 
 ### 1.4 - 10 баллов
 __Прейскурант цен запчастей для велосипеда__
-Отношение B (provider_city, provider_address, provider_inn, provider_name,
-spare_parts_prices). 
+Первая нормальная форма:
+`provider_inn` — ИНН поставщика (первичный ключ).
+provider_city — город поставщика.
+provider_address — полный адрес поставщика.
+provider_name — имя поставщика.
+provider_score — средняя оценка поставщика.
+is_provider_trusted — флаг доверия поставщику.
+`spare_part_name` — наименование запчасти.
+`bike_type` — тип велосипеда.
+price — цена запчасти для конкретного велосипеда.
 
-- `provider_city` - город поставщика
-- `provider_address` - адрес поставщика
-- `provider_inn` - ИНН поставщика
-- `provider_name` - имя поставщика
-- `spare_parts_prices` - таблица, содержащая в столбцах наименование запчасти,
-в строках содержится наименование велосипеда, в ячейке содержится ценник на 
-запчасть для конкретного велосипеда
+Вторая нормальная форма
+1. Отношение __BI__
+    - `provider_inn` 
+    - provider_name
+    - provider_city 
+    - provider_address
+    - is_provider_trusted 
+    - provider_score
 
-Первая нормальная форма, избавимся от таблицы:
-- `provider_city` - город поставщика
-- `provider_address` - адрес поставщика
-- `provider_inn` - ИНН поставщика
-- `provider_name` - имя поставщика
-- `spare_part_name` - запчасть / деталь - название
-- `bike_type` - название типа велосипеда
-- `price` -  цена запчасти для конкретного велосипеда
+2. Отношение __BI__ 
+    - `provider_inn`
+    - spare_part_name
+    - bike_type 
+    - price
 
-Вторая нормальная форма, декомпозируем на две таблицы - Providers и Spares:
-1. Таблица __Providers__ или отношение __BI__ - `provider_inn`
-    - `provider_inn` - ИНН поставщика
-    - `provider_name` - имя поставщика
-    - `provider_city` - город поставщика
-    - `provider_address` - адрес поставщика
+Третья нормальная форма:
+1. Отношение __BI__
+    - `provider_name` 
+    - provider_inn
 
-2. Таблица __Spares__ или отношение __BS__ - `spare_part_name`, `provider_inn`,
-`bike_type`
-    - `provider_inn` - ИНН поставщика
-    - `spare_part_name` - запчасть / деталь - название
-    - `bike_type` - название типа велосипеда
-    - `price` -  цена запчасти для конкретного велосипеда
+2. Отношение __BN__
+    - `provider_name` 
+    - provider_address
+    - is_provider_trusted  
+    - provider_score
+    
+2. Отношение __BI__ 
+    - `provider_name`
+    - `spare_part_name`
+    - `bike_type` 
+    - price
 
-Третья нормальная форма, урааа! Транзитивной зависимости нет :с
+3. Отношение __BA__
+    - `provider_address`
+    - provider_city     
