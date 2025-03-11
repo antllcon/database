@@ -182,7 +182,7 @@ __Прейскурант цен запчастей для велосипеда__
 Вторая нормальная форма
 1. Отношение __BI__
     - `provider_inn` 
-    - `provider_name`
+    - provider_name
     - provider_city 
     - provider_address
     - is_provider_trusted 
