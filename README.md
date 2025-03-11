@@ -4,7 +4,7 @@
 
 ### Ссылки
 
-[Карта курса](https://docs.google.com/document/d/1ZoPmXWj1_xjPRpgQbQOpFLExhTZwr6RklBMBZN9AB7g/edit?tab=t.0) - презентации и лабы
+[Карта курса](https://docs.google.com/document/d/1ZoPmXWj1_xjPRpgQbQOpFLExhTZwr6RklBMBZN9AB7g/edit?tab=t.0) - презентации и лабораторные работы
 
 ### Исполнитель
 
