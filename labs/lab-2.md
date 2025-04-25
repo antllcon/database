@@ -48,7 +48,7 @@
 Номер стоянки
 Время въезда 
 Время выезда 
-Тариф
+Название тарифа
 Стоимость тарифа
 Номер автомобиля
 Марка автомобиля
@@ -59,46 +59,48 @@
 Каждая стоянка имеет единственный въезд и выезд, шлагбаум открывается 1 раз в минуту. 
 Невозможно въехать на стоянку в 2 машины одновременно, как и выехать.
 Тариф имеет уникальное название и зависит от выбранной стоянки и наличии льгот, в частности:
-«Бережливый»: стоянка 1 для льготников
-«Стандарт»: стоянка 1 для нельготников
-«Премиум-А»: стоянка 2 для льготников
-«Премиум-B»: стоянка 2 для нельготников
+
+`Название тарифа`  `Номер стоянки`     `Льготы` (можно определить по номеру авто)
+«Стандарт»:         стоянка 1           нельготников
+«Бережливый»:       стоянка 1           льготников
+«Премиум-B»:        стоянка 2           нельготников
+«Премиум-А»:        стоянка 2           льготников
 
 Тарифы между парковками одинаковые!
 Стоимость тарифа - это цена формата (400 руб / час)
 
 ### Решение
 Первая нормальная форма:
-- time_entry  
-- time_exit 
-- tariff_cost
-- car_number
-- car_brand
-- car_model
-- car_color
-- car_luxury
-
-Ключи:
-- `parking_number` и `benefit`
-- `tariff`
-- `car_number`
+- `car_number` и `time_entry`
+- `car_number` и `time_exit`
+- `parking_number` и `time_entry`
+- `parking_number` и `time_exit`
+- `tariff_name` и `time_entry`
+- `tariff_name` и `time_exit`
+- benefit (от тарифа)
+- tariff_cost (зависит от названия тарифа)
+- car_brand (зависит от модели и номера машины)
+- car_model (зависит от номера машины)
+- car_color (зависит от номера машины)
+- car_luxury (зависит от бренда)
 
 Вторая нормальная форма:
-- __Тариф парковки__ (`tariff`, `parking_number` и `benefit`, tariff_cost)
-- __Парковка__ (`parking_number`, car_number)
-- __Машина__ (`car_number`, car_brand, car_model, car_color, time_entry, time_exit)
+- __Парковка__ (`tariff_name`, `parking_number`, `car_number`, `time_entry`, `time_exit`)
+- __Тариф__ (`tariff_name`, `parking_number`, `benefit`, tariff_cost)
+- __Машина__ (`car_number`, car_model, car_brand, car_color, car_luxury)
 
 Третья нормальная форма:
-- __Тариф парковки__ (`tariff`, `parking_number` и `benefit`, tariff_cost)
-- __Парковка__ (`parking_number`, car_number)
-- __Машина__ (`car_number`, car_brand, car_color, time_entry)
-- __Время__ (`time_entry`, time_exit)
-- __Модель машины__ (`car_brand`, car_model)
+- __Парковка__ (`tariff_name`, `parking_number`, `car_number`, `time_entry`, `time_exit`)
+- __Тариф__ (`tariff_name`, `parking_number`, `benefit`)
+- __Стоимость тарифа__ (`tariff_name`, tartiff_cost)
+- __Машина__ (`car_number`, car_model, car_color)
+- __Бренд машины__ (`car_model`, car_brand)
+- __Премиальность машины__ (`car_brand`, car_luxury)
 
 Нормальная форма Бойса-Кодда:
-- __Тариф парковки__ (`tariff`, parking_number, benefit)
-- __Парковка__ (`parking_number`, car_number)
-- __Стоимость тарифа__ (`tariff`, tariff_cost)
-- __Машина__ (`car_number`, car_brand, car_color, time_entry)
-- __Время__ (`time_entry`, time_exit)
-- __Модель машины__ (`car_brand`, car_model)
+- __Парковка__ (`parking_number`, `time_entry`, tariff_name, car_number, time_exit)
+- __Тариф__ (`tariff_name`, parking_number, benefit)
+- __Стоимость тарифа__ (`tariff_name`, tartiff_cost)
+- __Машина__ (`car_number`, car_model, car_color)
+- __Бренд машины__ (`car_model`, car_brand)
+- __Премиальность машины__ (`car_brand`, car_luxury)
