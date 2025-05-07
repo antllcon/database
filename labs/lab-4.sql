@@ -75,7 +75,6 @@ CREATE TABLE IF NOT EXISTS `comment`
     `is_deleted` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
     `parent_id`  INT UNSIGNED        NULL,
     PRIMARY KEY (`id`),
-    UNIQUE (`ip_address`),
     FOREIGN KEY (`parent_id`) REFERENCES `comment` (`id`),
     FOREIGN KEY (`news_id`) REFERENCES `news` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 )
@@ -84,11 +83,11 @@ CREATE TABLE IF NOT EXISTS `comment`
     COLLATE utf8mb4_unicode_ci
 ;
 
-CREATE TABLE `author`
+CREATE TABLE IF NOT EXISTS `author`
 (
     `author_id`  INT UNSIGNED AUTO_INCREMENT,
     `name`       VARCHAR(255)        NOT NULL,
-    `email`      VARCHAR(100)        NOT NULL UNIQUE COMMENT "Как хранить email?",
+    `email`      VARCHAR(100)        NOT NULL UNIQUE,
     `bio`        TEXT                NULL,
     `created_at` TIMESTAMP           NOT NULL DEFAULT NOW(),
     `is_active`  TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
@@ -102,7 +101,7 @@ CREATE TABLE `author`
 ALTER TABLE `news`
     ADD FOREIGN KEY (`author_id`) REFERENCES `author` (`author_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-CREATE TABLE `thread`
+CREATE TABLE  IF NOT EXISTS `thread`
 (
     `thread_id`   VARCHAR(255) NOT NULL,
     `title`       VARCHAR(255) NOT NULL,
@@ -134,3 +133,5 @@ SELECT *
 FROM `news_block`;
 
 DROP DATABASE `news_feed`;
+
+# ЗАДАНИЕ 2.
