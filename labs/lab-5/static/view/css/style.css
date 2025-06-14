@@ -1,0 +1,50 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header {
+    min-height: 10vh;
+}
+
+footer {
+    min-height: 10vh;
+}
+
+main {
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.center-child {
+    text-align: center;
+    max-width: 800px;
+    padding: 20px;
+}
+
+.main-title {
+    margin-bottom: 20px;
+}
+
+/*body {*/
+/*    transition: opacity ease-in 0.2s;*/
+/*}*/
+
+/*body {*/
+/*    opacity: 0;*/
+/*    display: block;*/
+/*    overflow: hidden;*/
+/*    position: relative;*/
+/*}*/
+
+/*!**/
+/*Шрифты:*/
+/*Основной текст: 400 (Regular)*/
+/*Заголовки: 600 (SemiBold) или 700 (Bold)*/
+/*Акценты, кнопки: 500 (Medium) или 600 (SemiBold)*/
+/**!*/
